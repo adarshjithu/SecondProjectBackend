@@ -3,24 +3,26 @@ import "./clearLog";
 import cors from "cors";
 import userRouter from "./Routes/userRoutes";
 import adminRouter from "./Routes/adminRoutes";
+
 import bodyParser from "body-parser";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import errorHandler from "./Middleware/errorHandeler";
 import postRouter from "./Routes/postRoutes";
 import http from "http"; // Import http module
+import MongoStore from "connect-mongo";
+import path from "path";
+import dotenv from 'dotenv'
+dotenv.config({ path: path.join(__dirname, '../.env') });
 import { createSocketConnectionForChat } from "./Config/Chat";
 import chatRouter from "./Routes/chatRoutes";
-import dotenv from "dotenv"; // Import dotenv
-import MongoStore = require("connect-mongo");
-dotenv.config({ path: '../.env' }); // Initialize dotenv
 
 const app: Application = express();
 
-// Create an HTTP server
+//Create an HTTP server
 const server = http.createServer(app);
 
-const io = createSocketConnectionForChat(server);
+const io = createSocketConnectionForChat(server)
 app.use(
     cors({
         origin: "http://localhost:5173",
@@ -28,13 +30,9 @@ app.use(
         allowedHeaders: ["Content-Type", "Authorization"],
         credentials: true,
     })
-); 
+);
 app.use(cookieParser());
-
- // Should now print the correct value
-
-
- app.use(
+app.use(
     session({
       secret: process.env.SESSION_SECRET || "your-secret-key",
       resave: false,
@@ -49,7 +47,6 @@ app.use(cookieParser());
       },
     })
   );
-  
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -58,10 +55,10 @@ app.use(express.json());
 app.use("/", userRouter);
 app.use("/admin", adminRouter);
 app.use("/post", postRouter);
-app.use("/chat", chatRouter);
+app.use("/chat",chatRouter)
 
 // Global error handler
 app.use(errorHandler);
 
 // Export the server for use in index.ts
-export { server, io };
+export { server,io };

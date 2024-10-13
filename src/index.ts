@@ -4,8 +4,8 @@
 import dotenv from 'dotenv';
 import { server } from './app'; // Import the server
 import connectDB from './Config/db';
-
-dotenv.config({ path: '../.env' });
+import path = require('path');
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
 connectDB();
 
