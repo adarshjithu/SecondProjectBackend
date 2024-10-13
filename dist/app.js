@@ -17,8 +17,11 @@ const postRoutes_1 = __importDefault(require("./Routes/postRoutes"));
 const http_1 = __importDefault(require("http")); // Import http module
 const Chat_1 = require("./Config/Chat");
 const chatRoutes_1 = __importDefault(require("./Routes/chatRoutes"));
+const dotenv_1 = __importDefault(require("dotenv")); // Import dotenv
+const MongoStore = require("connect-mongo");
+dotenv_1.default.config(); // Initialize dotenv
 const app = (0, express_1.default)();
-//Create an HTTP server
+// Create an HTTP server
 const server = http_1.default.createServer(app);
 exports.server = server;
 const io = (0, Chat_1.createSocketConnectionForChat)(server);
@@ -30,13 +33,18 @@ app.use((0, cors_1.default)({
     credentials: true,
 }));
 app.use((0, cookie_parser_1.default)());
+// Should now print the correct value
 app.use((0, express_session_1.default)({
-    secret: "your-secret-key",
+    secret: process.env.SESSION_SECRET || "your-secret-key",
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGODB_CONNECTION_STRING, // This must be set properly
+        ttl: 14 * 24 * 60 * 60, // Session expires in 14 days
+    }),
     cookie: {
-        secure: false,
-        maxAge: 24 * 60 * 60 * 1000,
+        secure: process.env.NODE_ENV === "production", // Secure cookies in production
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
     },
 }));
 app.use(body_parser_1.default.urlencoded({ extended: true }));
