@@ -55,5 +55,5 @@ cron.schedule("0 0 */20 * *", () => {
     clearLogFile();
 }); 
 
-console.log("Cron job scheduled: error.log will be cleared every 20 days.");
+
  
