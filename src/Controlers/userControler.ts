@@ -20,7 +20,7 @@ class UserControler {
                 if (user.success) {
                     req.session.userData = user.user;
                     res.status(OK).json({
-                        success: true,
+                        success: true, 
                         message: "OTP Send for verification..",
                         time: user?.user?.time,
                         otpPlace: user?.user?.email,
