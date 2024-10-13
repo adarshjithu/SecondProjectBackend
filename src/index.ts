@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import { server } from './app'; // Import the server
 import connectDB from './Config/db';
 
-dotenv.config();
+dotenv.config({ path: '../.env' });
 
 connectDB();
 

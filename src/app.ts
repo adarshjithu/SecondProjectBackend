@@ -13,7 +13,7 @@ import { createSocketConnectionForChat } from "./Config/Chat";
 import chatRouter from "./Routes/chatRoutes";
 import dotenv from "dotenv"; // Import dotenv
 import MongoStore = require("connect-mongo");
-dotenv.config(); // Initialize dotenv
+dotenv.config({ path: '../.env' }); // Initialize dotenv
 
 const app: Application = express();
 
